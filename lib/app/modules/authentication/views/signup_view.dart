@@ -1,22 +1,21 @@
 import 'package:demoproject_with_get_x/app/modules/authentication/controllers/authentication_controller.dart';
-import 'package:demoproject_with_get_x/app/modules/authentication/views/authentication_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
 class SignupView extends GetView {
-  const SignupView({Key? key}) : super(key: key);
+  SignupView({Key? key}) : super(key: key);
+  AuthenticationController authController = Get.put(AuthenticationController());
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passController = TextEditingController();
-
     return Scaffold(
       body: SafeArea(
         child: Container(
             height: Get.height,
             width: Get.width,
             child: Form(
+              key: authController.signupFormKey,
               child: Column(
                 children: [
                   Expanded(
@@ -45,8 +44,8 @@ class SignupView extends GetView {
                       flex: 1,
                       child: Column(
                         children: [
-                          _textField("email", emailController, TextInputType.emailAddress, "Email"),
-                          _textField("pass", passController, TextInputType.text, "Password"),
+                          _textField("email", TextInputType.emailAddress, "Email"),
+                          _textField("pass", TextInputType.text, "Password"),
                           TextButton(
                               style: ButtonStyle(
                                   elevation: MaterialStateProperty.all(0),
@@ -56,7 +55,7 @@ class SignupView extends GetView {
                                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                       RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),))
                               ),
-                              onPressed: (){},
+                              onPressed: authController.signUp,
                               child: Text("Enter", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))
                           ),
                           Padding(padding: EdgeInsets.symmetric(vertical: Get.height/30)),
@@ -67,7 +66,7 @@ class SignupView extends GetView {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const Text("Already have an account?", style: TextStyle(fontSize: 16)),
-                                TextButton(onPressed: AuthenticationController().gotoSignIn, child: const Text("Login", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)))
+                                TextButton(onPressed: authController.gotoSignIn, child: const Text("Login", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)))
                               ],
                             ),
                           ),
@@ -81,13 +80,13 @@ class SignupView extends GetView {
       ),
     );
   }
-  Widget _textField(String type, TextEditingController controller, TextInputType inputType, String text){
+  Widget _textField(String type, TextInputType inputType, String text){
     RegExp regexPass = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     return SizedBox(
       height: Get.height/10,
       width: Get.width/1.2,
       child: TextFormField(
-        controller: controller,
+        controller: type == "pass" ? authController.signupPassTextController.value : authController.signupEmailTextController.value,
         cursorColor: Colors.white,
         keyboardType: inputType,
         autovalidateMode: AutovalidateMode.onUserInteraction,

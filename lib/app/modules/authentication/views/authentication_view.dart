@@ -8,7 +8,6 @@ class AuthenticationView extends GetView<AuthenticationController> {
 
   @override
   Widget build(BuildContext context) {
-    String results = 'No';
 
     return Scaffold(
       body: SafeArea(
@@ -16,6 +15,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
             height: Get.height,
             width: Get.width,
             child: Form(
+              key: authController.signinFormKey,
               child: Column(
                 children: [
                   Expanded(
@@ -41,8 +41,8 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   Expanded(
                       child: Column(
                         children: [
-                          _textField("email", authController.emailTextController.value, TextInputType.emailAddress, "Email"),
-                          _textField("pass", authController.passController.value, TextInputType.text, "Password"),
+                          _textField("email", TextInputType.emailAddress, "Email"),
+                          _textField("pass", TextInputType.text, "Password"),
                           // paddingSymmetric(vertical: Get.height/100),
                           TextButton(
                               style: ButtonStyle(
@@ -53,7 +53,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
                                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                       RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),))
                               ),
-                              onPressed: AuthenticationController().signIn ,
+                              onPressed: authController.signIn ,
                               child: const Text("Login", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))
                           ),
                           Padding(padding: EdgeInsets.symmetric(vertical: Get.height/30)),
@@ -64,7 +64,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const Text("Do not have an account?", style: TextStyle(fontSize: 16)),
-                                TextButton(onPressed: AuthenticationController().gotoSignUp, child: const Text("SignUp", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)))
+                                TextButton(onPressed: authController.gotoSignUp, child: const Text("SignUp", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)))
                               ],
                             ),
                           ),
@@ -78,12 +78,12 @@ class AuthenticationView extends GetView<AuthenticationController> {
       ),
     );
   }
-  Widget _textField(String type, TextEditingController controller, TextInputType inputType, String text){
+  Widget _textField(String type, TextInputType inputType, String text){
     return SizedBox(
       height: Get.height/10,
       width: Get.width/1.2,
       child: TextFormField(
-        controller: controller,
+        controller: type == "pass" ? authController.passTextController.value : authController.emailTextController.value,
         cursorColor: Colors.white,
         keyboardType: inputType,
         autovalidateMode: AutovalidateMode.onUserInteraction,
