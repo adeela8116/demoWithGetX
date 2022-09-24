@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../modules/authentication/bindings/authentication_binding.dart';
 import '../modules/authentication/views/authentication_view.dart';
+import '../modules/authentication/views/signin_view.dart';
 import '../modules/authentication/views/signup_view.dart';
 import '../modules/chat/bindings/chat_binding.dart';
 import '../modules/chat/views/chat_view.dart';
@@ -25,6 +26,11 @@ class AppPages {
     GetPage(
       name: _Paths.AUTHENTICATION,
       page: () => AuthenticationView(),
+      binding: AuthenticationBinding(),
+    ),
+    GetPage(
+      name: _Paths.SIGNIN,
+      page: () => SigninView(),
       binding: AuthenticationBinding(),
     ),
     GetPage(

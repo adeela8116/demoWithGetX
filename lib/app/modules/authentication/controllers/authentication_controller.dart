@@ -15,8 +15,9 @@ class AuthenticationController extends GetxController {
   final count = 0.obs;
   void increment() => count.value++;
   void gotoSignUp() => Get.toNamed(Routes.SIGNUP);
-  void gotoSignIn() => Get.toNamed(Routes.AUTHENTICATION);
+  void gotoSignIn() => Get.toNamed(Routes.SIGNIN);
   void gotoChat() => Get.toNamed(Routes.CHAT);
+  void gotoAuth() => Get.toNamed(Routes.AUTHENTICATION);
 
   @override
   void onInit() {
@@ -37,6 +38,11 @@ class AuthenticationController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  Future signout() async{
+    await FirebaseAuth.instance.signOut();
+    gotoAuth();
   }
 
   Future signIn() async {
@@ -83,7 +89,7 @@ class AuthenticationController extends GetxController {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-
+    gotoChat();
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
